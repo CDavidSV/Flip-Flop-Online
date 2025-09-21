@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/CDavidSV/Flip-Flop-Online/backend/api/data"
 	"github.com/CDavidSV/Flip-Flop-Online/backend/api/handler"
 	"github.com/CDavidSV/Flip-Flop-Online/backend/api/middlewares"
 	"github.com/CDavidSV/Flip-Flop-Online/backend/config"
+	"github.com/CDavidSV/Flip-Flop-Online/backend/internal/data"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
