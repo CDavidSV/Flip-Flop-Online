@@ -1,25 +1,44 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/CDavidSV/Flip-Flop-Online/backend/api/handler"
 	m "github.com/CDavidSV/Flip-Flop-Online/backend/api/middleware"
 	"github.com/CDavidSV/Flip-Flop-Online/backend/config"
 	"github.com/CDavidSV/Flip-Flop-Online/backend/internal/data"
+	"github.com/MicahParks/keyfunc/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 )
 
+func NewJWKSHHandler() keyfunc.Keyfunc {
+	jwksURL := config.SupabaseURL + "/auth/v1/.well-known/jwks.json"
+
+	jwks, err := keyfunc.NewDefaultOverrideCtx(context.Background(), []string{jwksURL}, keyfunc.Override{
+		RefreshInterval: time.Minute * 5,
+	})
+	if err != nil {
+		log.Fatalf("Failed to create JWK Set from resource at the given URL.\nError: %s", err)
+	}
+
+	return jwks
+}
+
 func loadRoutes(e *echo.Echo, db *pgxpool.Pool) {
 	h := handler.NewHandler(db)
 
+	// Create JWKs from Supabase
+	jwks := NewJWKSHHandler()
+
 	e.GET("/health", h.HealthCheck)
 
-	apiV1 := e.Group("/api/v1")
+	apiV1 := e.Group("/api/v1", m.Authorize(jwks))
 
 	// Social
 	socialGroup := apiV1.Group("/social")
