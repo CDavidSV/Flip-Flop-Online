@@ -18,6 +18,8 @@ func init() {
 	AccessTokenSecret = os.Getenv("ACCESS_TOKEN_SECRET")
 	RefreshTokenSecret = os.Getenv("REFRESH_TOKEN_SECRET")
 	ServerAddress = os.Getenv("SERVER_ADDRESS")
+	SupabaseURL = os.Getenv("SUPABASE_URL")
+	SupabaseKey = os.Getenv("SUPABASE_KEY")
 }
 
 var (
@@ -35,6 +37,8 @@ var (
 	AccessTokenSecret  string
 	RefreshTokenSecret string
 	ServerAddress      string
+	SupabaseURL        string
+	SupabaseKey        string
 	CorsConfig         = middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "DELETE", "HEAD", "OPTION", "PUT"},

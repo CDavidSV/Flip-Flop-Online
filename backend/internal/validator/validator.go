@@ -1,5 +1,7 @@
 package validator
 
+import "net/mail"
+
 // FieldError represents a validation error for a specific field.
 type FieldError struct {
 	Field   string `json:"field"`
@@ -38,4 +40,9 @@ func (v *Validator) Check(ok bool, field, message string, value any) {
 	if !ok {
 		v.AddError(field, message, value)
 	}
+}
+
+func (v *Validator) ValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
